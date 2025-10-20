@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Analyzer</title>
+</head>
+<body>
+    <div class="topdes">
+        <h1 class="title">EarthQuake Predictor</h1>
+    </div>
+
+    <form id="predict_form">
+        <label for="magnitude">Magnitude: </label>
+        <input type="num" name="magnitude" >
+        <label for="depth">Depth: </label>
+        <input type="number" name="depth">
+        <label for="cdi">CDI: </label>
+        <input type="number" name="cdi" >
+        <label for="mmi">Mmi: </label>
+        <input type="number" name="mmi">
+        <label for="sig">Sig: </label>
+        <input type="number" name="sig">
+        <button type="submit">Predict</button>
+    </form>
+        <div id="result"></div>
+        <script>
+            document.getElementById("predict_form").addEventListener("submit", async function(e){
+                e.preventDefault();
+            
+                const formdata = {
+                    magnitude: parseFloat(document.querySelector('[name="magnitude"]').value),
+                    depth: parseFloat(document.querySelector('[name="depth"]').value),
+                    cdi: parseFloat(document.querySelector('[name="cdi"]').value),
+                    mmi: parseFloat(document.querySelector('[name="mmi"]').value),
+                    sig: parseFloat(document.querySelector('[name="sig"]').value)
+                };
+            
+                const response = await fetch('/api/predict/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formdata)
+                });
+            
+                const data = await response.json();
+                document.getElementById('result').innerText = `Predicted value: ${data.prediction}`;
+            });
+            </script>
+            
+</body>
+</html>
